@@ -14,17 +14,17 @@ jobs:
       - name: 获取代码
         uses: actions/checkout@master
       - name: Check if it's the first commit
-        id: check_commit
+        id: is_first_commit
         run: |
           if [[ $(git rev-parse --abbrev-ref HEAD) != "main" ]]; then
             git fetch origin main
             COMMIT_COUNT=$(git rev-list --count HEAD..origin/main)
-            echo "::set-output name=is_first_commit::$(test $COMMIT_COUNT -eq 0 && echo true || echo false)"
+            echo "is_first_commit=$(test $COMMIT_COUNT -eq 0 && echo true || echo false)" >> $GITHUB_ENV
           else
-            echo "::set-output name=is_first_commit::false"
+            echo "is_first_commit=false" >> $GITHUB_ENV
           fi
       - name: 创建PR
-        if: steps.check_branch.outputs.new_branch == 'true'
+        if: env.is_first_commit == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
@@ -35,6 +35,7 @@ jobs:
     needs: Auto-PR
     name: Unit-Test
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
@@ -46,6 +47,7 @@ jobs:
     needs: Auto-PR
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
@@ -57,6 +59,7 @@ jobs:
     needs: Auto-PR
     name: Build-Package
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始构建包
         run: |
@@ -68,6 +71,7 @@ jobs:
     needs: Build-Package
     name: Build-Image
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始构建镜像
         run: |
@@ -79,6 +83,7 @@ jobs:
     needs: Build-Image
     name: Build-Chart
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始构建Chart
         run: |
@@ -90,6 +95,7 @@ jobs:
     needs: [Build-Package,Build-Image,Build-Chart]
     name: Deploy-Validate
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: 开始部署
         run: |
@@ -101,6 +107,7 @@ jobs:
     needs: Deploy-Validate
     name: SAST-Scan
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: SAST-Scan Start
         run: |
@@ -112,6 +119,7 @@ jobs:
     needs: Deploy-Validate
     name: DAST-Scan
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: DAST-Scan Start
         run: |
@@ -123,6 +131,7 @@ jobs:
     needs: Deploy-Validate
     name: CONT-Scan
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: CONT-Scan Start
         run: |
@@ -134,6 +143,7 @@ jobs:
     needs: Deploy-Validate
     name: FOSS-Scan
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: FOSS-Scan Start
         run: |
@@ -145,6 +155,7 @@ jobs:
     needs: Deploy-Validate
     name: Regression-Test
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: Regression-Test Start
         run: |
@@ -156,6 +167,7 @@ jobs:
     needs: Deploy-Validate
     name: Performance-Test
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: Performance-Test Start
         run: |
@@ -167,6 +179,7 @@ jobs:
     needs: [Regression-Test,Performance-Test,FOSS-SCAN,CONT-SCAN,DAST-SCAN,SAST-SCAN]
     name: Notification-Email
     runs-on: ubuntu-latest
+    if: env.is_first_commit == 'false'
     steps:
       - name: Notification-Email
         run: |
