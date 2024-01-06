@@ -29,12 +29,11 @@ jobs:
           while IFS= read -r branch; do
             if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
-              git merge origin/main --no-commit --no-ff --allow-unrelated-histories --abort
+              git merge origin/main  --no-edit || true
               if [[ $? -eq 0 ]]; then
                 git commit -m "Merge changes from main branch"
                 git push origin "$branch"
               else
-                git merge --abort
                 echo "Skipping branch $branch due to conflicts"
               fi
             fi
