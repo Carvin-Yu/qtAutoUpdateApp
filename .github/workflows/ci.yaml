@@ -12,12 +12,13 @@ jobs:
       - name: 获取代码
         uses: actions/checkout@master
         continue-on-error: true
+      - name: Check if first commit
         id: first_commit
         run: |
-          if [[ -z $(git log --oneline ${{ github.ref }}) ]]; then
-            echo "true" >> $GITHUB_ENV
+          if [[ -z $(git log --oneline feature/JIRA-2154) ]]; then
+            echo "true"
           else
-            echo "false" >> $GITHUB_ENV
+            echo "false"
           fi
       - name: 创建PR
         if: env.first_commit == 'true'
