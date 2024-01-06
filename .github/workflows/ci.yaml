@@ -8,6 +8,7 @@ on:
       input:
         description: 'Environment'
         required: false
+        default: 'uat'
 
 
 jobs:
