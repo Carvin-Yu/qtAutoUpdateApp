@@ -1,0 +1,20 @@
+name: PR 预处理
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+jobs:
+  merge-branch:
+    name: 提交到PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取代码
+        uses: actions/checkout@master
+      - name: 提交
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          delete-branch: true
+          base: master
+          branch: ${{ github.ref }}
