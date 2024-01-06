@@ -16,10 +16,8 @@ jobs:
         id: first_commit
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            echo "Current branch is a new branch
             echo "first_commit=true" >> $GITHUB_ENV
           else
-            echo "Current branch is not a new branch"
             echo "first_commit=false" >> $GITHUB_ENV
           fi
       - name: 创建PR
@@ -30,6 +28,9 @@ jobs:
           delete-branch: true
           base: main
           branch: ${{ github.ref }}
+      - name: 不创建PR
+        if: env.first_commit == 'true'
+        run: echo haha
   Unit-Test:
     needs: Auto-PR
     name: Unit-Test
