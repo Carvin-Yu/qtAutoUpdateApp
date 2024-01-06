@@ -1,0 +1,137 @@
+name: 持续集成
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+jobs:
+  Auto-PR:
+    name: 自动创建PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取代码
+        uses: actions/checkout@master
+      - name: 创建PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          delete-branch: true
+          base: main
+          branch: ${{ github.ref }}
+  Sonar-Qube-Scan:
+    needs: Auto-PR
+    name: 构建包
+    steps:
+      - name: 开始扫描
+        run: |
+          echo SonarQube Scan
+      - name: 完成扫描
+        run: |
+          echo upload evidence
+  Build-Package:
+    needs: Auto-PR
+    name: 构建包
+    steps:
+      - name: 开始构建包
+        run: |
+          echo mvn clean package
+      - name: 开始上传制品
+        run: |
+          echo upload package
+  Build-Image:
+    needs: Build-Package
+    name: 构建镜像
+    steps:
+      - name: 开始构建镜像
+        run: |
+          echo docker build .
+      - name: 开始上传制品
+        run: |
+          echo upload image
+  Build-Chart:
+    needs: Build-Image
+    name: 构建Helm Chart
+    steps:
+      - name: 开始构建Chart
+        run: |
+          echo helm build .
+      - name: 开始上传制品
+        run: |
+          echo upload chart
+  Deploy-Validate:
+    needs: Build-Chart
+    name: 部署的验证
+    steps:
+      - name: 开始部署
+        run: |
+          echo helm build .
+      - name: 部署完成
+        run: |
+          echo upload chart
+  SAST-SCAN:
+    needs: Build-Chart
+    name: SAST-Scan
+    steps:
+      - name: SAST-Scan Start
+        run: |
+          echo SAST-SCAN
+      - name: SAST-Scan Completed
+        run: |
+          echo SAST-SCAN
+  DAST-SCAN:
+    needs: Build-Chart
+    name: DAST-Scan
+    steps:
+      - name: DAST-Scan Start
+        run: |
+          echo DAST-SCAN
+      - name: DAST-Scan Completed
+        run: |
+          echo DAST-SCAN
+  CONT-SCAN:
+    needs: Build-Chart
+    name: CONT-Scan
+    steps:
+      - name: CONT-Scan Start
+        run: |
+          echo CONT-SCAN
+      - name: CONT-Scan Completed
+        run: |
+          echo CONT-SCAN
+  FOSS-SCAN:
+    needs: Build-Chart
+    name: FOSS-Scan
+    steps:
+      - name: FOSS-Scan Start
+        run: |
+          echo FOSS-SCAN
+      - name: FOSS-Scan Completed
+        run: |
+          echo FOSS-SCAN
+  Regression-Test:
+    needs: Build-Chart
+    name: Regression-Test
+    steps:
+      - name: Regression-Test Start
+        run: |
+          echo Regression-Test
+      - name: Regression-Test Completed
+        run: |
+          echo Regression-Test
+  Performance-Test:
+    needs: Build-Chart
+    name: Performance-Test
+    steps:
+      - name: Performance-Test Start
+        run: |
+          echo Performance-Test
+      - name: Performance-Test Completed
+        run: |
+          echo Performance-Test
+  Notification-Email:
+    needs: [SAST-Scan,DAST-Scan,CONT-Scan,FOSS-Scan,Regression-Test,Performance-Test]
+    name: Notification-Email
+    steps:
+      - name: Notification-Email
+        run: |
+          echo Send an email.
