@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
         continue-on-error: true
       - name: Auto Create PR
-        if: github.event.before == "0000000000000000000000000000000000000000"
+        if: ${{ github.event.before }} == "0000000000000000000000000000000000000000"
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
@@ -24,7 +24,7 @@ jobs:
     needs: Auto-Integration
     name: Unit-Test
     runs-on: ubuntu-latest
-    if: github.event.before != "0000000000000000000000000000000000000000"
+    if: ${{ github.event.before }} == "0000000000000000000000000000000000000000"
     steps:
       - name: 开始扫描
         run: |
@@ -36,7 +36,7 @@ jobs:
     needs: Auto-Integration
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
-    if: github.event.before != "0000000000000000000000000000000000000000"
+    if: ${{ github.event.before }} == "0000000000000000000000000000000000000000"
     steps:
       - name: 开始扫描
         run: |
@@ -48,7 +48,7 @@ jobs:
     needs: Auto-Integration
     name: Build-Package
     runs-on: ubuntu-latest
-    if: github.event.before != "0000000000000000000000000000000000000000"
+    if: ${{ github.event.before }} == "0000000000000000000000000000000000000000"
     steps:
       - name: 开始构建包
         run: |
