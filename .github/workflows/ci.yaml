@@ -4,6 +4,9 @@ on:
     branches:
       - 'feature/**'
 
+env:
+  first_commit: "false"
+
 jobs:
   Auto-Integration:
     name: Auto-Integration
@@ -13,15 +16,12 @@ jobs:
         uses: actions/checkout@master
         continue-on-error: true
       - name: Check if new branch
-        id: first_commit
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            echo "first_commit=true" >> $GITHUB_ENV
-          else
-            echo "first_commit=false" >> $GITHUB_ENV
+            echo "MY_VARIABLE=true" >> $GITHUB_ENV
           fi
       - name: Auto Create PR
-        if: env.first_commit == 'false'
+        if: env.first_commit == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
@@ -37,7 +37,7 @@ jobs:
       - name: Check if new branch
         id: first_commit
         run: |
-          echo ${{ needs.Auto-Integration.outputs.first_commit }}
+          echo ${{ env.MY_VARIABLE }}
       - name: 开始扫描
         run: |
           echo Unit-Test
