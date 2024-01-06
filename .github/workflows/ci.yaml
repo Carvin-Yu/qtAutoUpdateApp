@@ -3,7 +3,13 @@ on:
   push:
     branches:
       - 'feature/**'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # 如果手动触发的话，则定义如下参数
+    inputs:
+      input:
+        description: 'Environment'
+        required: false
+        default: 'uat'
+
 
 jobs:
   Auto-PR:
@@ -152,7 +158,7 @@ jobs:
         run: |
           echo Performance-Test
   Notification-Email:
-    needs: [SAST-Scan,DAST-Scan,CONT-Scan,FOSS-Scan,Regression-Test,Performance-Test]
+    needs: [Regression-Test,Performance-Test,FOSS-SCAN,CONT-SCAN,DAST-SCAN,SAST-SCAN]
     name: Notification-Email
     runs-on: ubuntu-latest
     steps:
