@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
         continue-on-error: true
       - name: run1
-        run: git rev-parse --abbrev-ref HEAD)" != "main
+        run: git rev-parse --abbrev-ref HEAD
       - name: run2
         run: git rev-list --count HEAD..main
       - name: Check if first commit
