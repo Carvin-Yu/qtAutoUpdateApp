@@ -6,7 +6,7 @@ on:
 
 jobs:
   Auto-Integration:
-    name: Auto Create PR
+    name: Auto-Integration
     runs-on: ubuntu-latest
     steps:
       - name: Pull Code
@@ -21,7 +21,7 @@ jobs:
             echo "first_commit=false" >> $GITHUB_ENV
           fi
       - name: Auto Create PR
-        if: env.first_commit == 'false'
+        if: env.first_commit == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
