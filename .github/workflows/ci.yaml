@@ -5,11 +5,11 @@ on:
       - 'feature/**'
 
 jobs:
-  Auto-PR:
+  Auto-Integration:
     name: Auto Create PR
     runs-on: ubuntu-latest
     steps:
-      - name: 获取代码
+      - name: Pull Code
         uses: actions/checkout@master
         continue-on-error: true
       - name: Check if new branch
@@ -20,7 +20,7 @@ jobs:
           else
             echo "first_commit=false" >> $GITHUB_ENV
           fi
-      - name: 创建PR
+      - name: Auto Create PR
         if: env.first_commit == 'false'
         uses: peter-evans/create-pull-request@v5
         with:
@@ -29,10 +29,10 @@ jobs:
           base: main
           branch: ${{ github.ref }}
   Unit-Test:
-    needs: Auto-PR
+    needs: Auto-Integration
     name: Unit-Test
     runs-on: ubuntu-latest
-    if: needs.Auto-PR.outputs.first_commit == 'false'
+    if: needs.Auto-Integration.outputs.first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
@@ -41,10 +41,10 @@ jobs:
         run: |
           echo upload evidence
   Sonar-Qube-Scan:
-    needs: Auto-PR
+    needs: Auto-Integration
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
-    if: needs.Auto-PR.outputs.first_commit == 'false'
+    if: needs.Auto-Integration.outputs.first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
@@ -53,10 +53,10 @@ jobs:
         run: |
           echo upload evidence
   Build-Package:
-    needs: Auto-PR
+    needs: Auto-Integration
     name: Build-Package
     runs-on: ubuntu-latest
-    if: needs.Auto-PR.outputs.first_commit == 'false'
+    if: needs.Auto-Integration.outputs.first_commit == 'false'
     steps:
       - name: 开始构建包
         run: |
