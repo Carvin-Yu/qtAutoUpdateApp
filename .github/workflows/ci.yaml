@@ -28,14 +28,11 @@ jobs:
           delete-branch: true
           base: main
           branch: ${{ github.ref }}
-      - name: 不创建PR
-        if: env.first_commit == 'true'
-        run: echo haha
   Unit-Test:
     needs: Auto-PR
     name: Unit-Test
     runs-on: ubuntu-latest
-    
+    if: env.first_commit == 'true'
     steps:
       - name: 开始扫描
         run: |
@@ -47,6 +44,7 @@ jobs:
     needs: Auto-PR
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: 开始扫描
         run: |
@@ -58,6 +56,7 @@ jobs:
     needs: Auto-PR
     name: Build-Package
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: 开始构建包
         run: |
@@ -69,6 +68,7 @@ jobs:
     needs: Build-Package
     name: Build-Image
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: 开始构建镜像
         run: |
@@ -80,6 +80,7 @@ jobs:
     needs: Build-Image
     name: Build-Chart
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: 开始构建Chart
         run: |
@@ -91,6 +92,7 @@ jobs:
     needs: [Build-Package,Build-Image,Build-Chart]
     name: Deploy-Validate
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: 开始部署
         run: |
@@ -102,6 +104,7 @@ jobs:
     needs: Deploy-Validate
     name: SAST-Scan
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: SAST-Scan Start
         run: |
@@ -113,6 +116,7 @@ jobs:
     needs: Deploy-Validate
     name: DAST-Scan
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: DAST-Scan Start
         run: |
@@ -124,6 +128,7 @@ jobs:
     needs: Deploy-Validate
     name: CONT-Scan
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: CONT-Scan Start
         run: |
@@ -135,6 +140,7 @@ jobs:
     needs: Deploy-Validate
     name: FOSS-Scan
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: FOSS-Scan Start
         run: |
@@ -146,6 +152,7 @@ jobs:
     needs: Deploy-Validate
     name: Regression-Test
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: Regression-Test Start
         run: |
@@ -157,6 +164,7 @@ jobs:
     needs: Deploy-Validate
     name: Performance-Test
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: Performance-Test Start
         run: |
@@ -168,6 +176,7 @@ jobs:
     needs: [Regression-Test,Performance-Test,FOSS-SCAN,CONT-SCAN,DAST-SCAN,SAST-SCAN]
     name: Notification-Email
     runs-on: ubuntu-latest
+    if: env.first_commit == 'true'
     steps:
       - name: Notification-Email
         run: |
