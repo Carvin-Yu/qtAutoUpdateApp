@@ -32,7 +32,7 @@ jobs:
     needs: Auto-PR
     name: Unit-Test
     runs-on: ubuntu-latest
-    
+    if: env.first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
