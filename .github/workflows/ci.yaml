@@ -28,6 +28,7 @@ jobs:
     name: Unit-Test
     runs-on: ubuntu-latest
 	if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
+    steps:
       - name: 开始扫描
         run: |
           echo Unit-Test
@@ -38,7 +39,7 @@ jobs:
     needs: Auto-Integration
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
-    if: if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
+    if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
     steps:
       - name: 开始扫描
         run: |
@@ -50,7 +51,7 @@ jobs:
     needs: Auto-Integration
     name: Build-Package
     runs-on: ubuntu-latest
-    if: if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
+    if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
     steps:
       - name: 开始构建包
         run: |
