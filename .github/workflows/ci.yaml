@@ -157,7 +157,7 @@ jobs:
         run: |
           echo Performance-Test
   Notification-Email:
-    needs: Regression-Test
+    needs: [Regression-Test,Performance-Test,FOSS-SCAN,CONT-SCAN,DAST-SCAN,SAST-SCAN]
     name: Notification-Email
     runs-on: ubuntu-latest
     steps:
