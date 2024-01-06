@@ -165,3 +165,37 @@ jobs:
       - name: Notification-Email
         run: |
           echo Send an email.
+          
+name: Delete Branch
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is merged
+        id: pr
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.TOKEN_GITHUB }}
+          script: |
+            const pr = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            return { merged: pr.data.merged };
+
+      - name: Delete branch
+        if: ${{ steps.pr.outputs.merged == true }}
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+          git fetch --prune
+          git branch -d ${{ github.head_ref }}
+          git push origin --delete ${{ github.head_ref }}
