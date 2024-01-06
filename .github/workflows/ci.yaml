@@ -12,11 +12,6 @@ jobs:
       - name: 获取代码
         uses: actions/checkout@master
         continue-on-error: true
-      - name: run1
-        run: git rev-parse --abbrev-ref HEAD)" != "main
-      - name: run2
-        run: git rev-list --count HEAD..main
-      - name: Check if first commit
         id: first_commit
         run: |
           if [[ -z $(git log --oneline ${{ github.ref }}) ]]; then
