@@ -13,9 +13,9 @@ jobs:
 
       - name: Get branch list
         run: |
-          curl -s -H "Authorization: token ${{ secrets.TOKEN_GITHUB }}" \
-            "https://api.github.com/repos/:owner/:repo/branches" \
-            | jq -r ".[].name" > branch_list.txt
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/:owner/:repo/branches" \
+          | jq -r ".[].ref" > branch_list.txt
 
       - name: Merge to branches
         run: |
