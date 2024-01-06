@@ -15,13 +15,8 @@ jobs:
       - name: Pull Code
         uses: actions/checkout@master
         continue-on-error: true
-      - name: Check if new branch
-        run: |
-          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            echo "MY_VARIABLE=true" >> $GITHUB_ENV
-          fi
       - name: Auto Create PR
-        if: env.first_commit == 'true'
+        if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
@@ -32,12 +27,7 @@ jobs:
     needs: Auto-Integration
     name: Unit-Test
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Check if new branch
-        id: first_commit
-        run: |
-          echo ${{ env.MY_VARIABLE }}
+	if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
       - name: 开始扫描
         run: |
           echo Unit-Test
@@ -48,7 +38,7 @@ jobs:
     needs: Auto-Integration
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
-    if: needs.Auto-Integration.outputs.first_commit == 'false'
+    if: if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
     steps:
       - name: 开始扫描
         run: |
@@ -60,7 +50,7 @@ jobs:
     needs: Auto-Integration
     name: Build-Package
     runs-on: ubuntu-latest
-    if: needs.Auto-Integration.outputs.first_commit == 'false'
+    if: if: ${{ github.event.before != '0000000000000000000000000000000000000000' }}
     steps:
       - name: 开始构建包
         run: |
