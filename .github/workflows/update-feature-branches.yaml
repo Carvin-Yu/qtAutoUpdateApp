@@ -29,7 +29,7 @@ jobs:
           while IFS= read -r branch; do
             if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
-              git merge origin/main --no-commit --no-ff --allow-unrelated-histories
+              git merge origin/main --no-commit --no-ff --allow-unrelated-histories --abort
               if [[ $? -eq 0 ]]; then
                 git commit -m "Merge changes from main branch"
                 git push origin "$branch"
