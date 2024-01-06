@@ -44,6 +44,7 @@ jobs:
     needs: Auto-PR
     name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
+    if: needs.Auto-PR.outputs.first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
@@ -55,6 +56,7 @@ jobs:
     needs: Auto-PR
     name: Build-Package
     runs-on: ubuntu-latest
+    if: needs.Auto-PR.outputs.first_commit == 'false'
     steps:
       - name: 开始构建包
         run: |
