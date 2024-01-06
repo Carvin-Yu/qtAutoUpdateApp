@@ -21,7 +21,7 @@ jobs:
             echo "first_commit=false" >> $GITHUB_ENV
           fi
       - name: 创建PR
-        if: env.first_commit == 'true'
+        if: env.first_commit == 'false'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
