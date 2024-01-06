@@ -20,7 +20,8 @@ jobs:
           branch: ${{ github.ref }}
   Sonar-Qube-Scan:
     needs: Auto-PR
-    name: 构建包
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
     steps:
       - name: 开始扫描
         run: |
@@ -31,6 +32,7 @@ jobs:
   Build-Package:
     needs: Auto-PR
     name: 构建包
+    runs-on: ubuntu-latest
     steps:
       - name: 开始构建包
         run: |
@@ -41,6 +43,7 @@ jobs:
   Build-Image:
     needs: Build-Package
     name: 构建镜像
+    runs-on: ubuntu-latest
     steps:
       - name: 开始构建镜像
         run: |
@@ -51,6 +54,7 @@ jobs:
   Build-Chart:
     needs: Build-Image
     name: 构建Helm Chart
+    runs-on: ubuntu-latest
     steps:
       - name: 开始构建Chart
         run: |
@@ -59,8 +63,9 @@ jobs:
         run: |
           echo upload chart
   Deploy-Validate:
-    needs: Build-Chart
+    needs: [Build-Package,Build-Image,Build-Chart]
     name: 部署的验证
+    runs-on: ubuntu-latest
     steps:
       - name: 开始部署
         run: |
@@ -69,8 +74,9 @@ jobs:
         run: |
           echo upload chart
   SAST-SCAN:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: SAST-Scan
+    runs-on: ubuntu-latest
     steps:
       - name: SAST-Scan Start
         run: |
@@ -79,8 +85,9 @@ jobs:
         run: |
           echo SAST-SCAN
   DAST-SCAN:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: DAST-Scan
+    runs-on: ubuntu-latest
     steps:
       - name: DAST-Scan Start
         run: |
@@ -89,8 +96,9 @@ jobs:
         run: |
           echo DAST-SCAN
   CONT-SCAN:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: CONT-Scan
+    runs-on: ubuntu-latest
     steps:
       - name: CONT-Scan Start
         run: |
@@ -99,8 +107,9 @@ jobs:
         run: |
           echo CONT-SCAN
   FOSS-SCAN:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: FOSS-Scan
+    runs-on: ubuntu-latest
     steps:
       - name: FOSS-Scan Start
         run: |
@@ -109,8 +118,9 @@ jobs:
         run: |
           echo FOSS-SCAN
   Regression-Test:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: Regression-Test
+    runs-on: ubuntu-latest
     steps:
       - name: Regression-Test Start
         run: |
@@ -119,8 +129,9 @@ jobs:
         run: |
           echo Regression-Test
   Performance-Test:
-    needs: Build-Chart
+    needs: Deploy-Validate
     name: Performance-Test
+    runs-on: ubuntu-latest
     steps:
       - name: Performance-Test Start
         run: |
@@ -131,6 +142,7 @@ jobs:
   Notification-Email:
     needs: [SAST-Scan,DAST-Scan,CONT-Scan,FOSS-Scan,Regression-Test,Performance-Test]
     name: Notification-Email
+    runs-on: ubuntu-latest
     steps:
       - name: Notification-Email
         run: |
