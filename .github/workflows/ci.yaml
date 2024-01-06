@@ -13,11 +13,14 @@ jobs:
         uses: actions/checkout@master
         continue-on-error: true
       - name: Check if new branch
+        id: first_commit
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            echo "Current branch is a new branch"
+            echo "Current branch is a new branch
+            echo "first_commit=true" >> $GITHUB_ENV
           else
             echo "Current branch is not a new branch"
+            echo "first_commit=false" >> $GITHUB_ENV
           fi
       - name: 创建PR
         if: env.first_commit == 'true'
@@ -31,6 +34,7 @@ jobs:
     needs: Auto-PR
     name: Unit-Test
     runs-on: ubuntu-latest
+    if: env.first_commit == 'false'
     steps:
       - name: 开始扫描
         run: |
