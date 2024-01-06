@@ -1,31 +1,36 @@
-name: Merge to Branches
+name: Update feature Branches
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  merge-branches:
+  update-branches:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Fetch all branches
+        run: git fetch --all
 
       - name: Get branch list
         run: |
-          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/:owner/:repo/branches" \
-          | jq -r ".[].ref" > branch_list.txt
+          git branch -r --no-abbrev | sed 's/origin\///' > branch_list.txt
 
-      - name: Merge to branches
+      - name: Update branches
         run: |
-          while read -r branch; do
-            if git diff --quiet main "$branch"; then
-              echo "No conflicts. Skipping $branch"
-            else
+          while IFS= read -r branch; do
+            if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
-              git merge --no-ff --no-edit main || true
-              git push origin "$branch"
-              echo "Merged into $branch"
+              git merge origin/main --no-commit --no-ff
+              if [[ $? -eq 0 ]]; then
+                git commit -m "Merge changes from main branch"
+                git push origin "$branch"
+              else
+                echo "Skipping branch $branch due to conflicts"
+              fi
             fi
           done < branch_list.txt
