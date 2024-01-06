@@ -3,7 +3,30 @@ on:
   push:
     branches:
       - 'feature/**'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # 如果手动触发的话，则定义如下参数
+    inputs:
+      input:
+        description: 'Environment'
+        required: false
+      checkbox:
+        description: 'Action'
+        required: false
+        default: [Unit-Test,Sonar-Qube-Scan,Build-Package,Build-Image,Build-Chart,Regression-Test]
+        options:
+          - Unit-Test
+          - Sonar-Qube-Scan
+          - Build-Package
+          - Build-Image
+          - Build-Chart
+          - Deploy-Validate
+          - SAST-Scan
+          - DAST-Scan
+          - CONT-Scan
+          - FOSS-Scan
+          - Regression-Test
+          - Performance-Test
+          - Notification-Email
+
 
 jobs:
   Auto-PR:
