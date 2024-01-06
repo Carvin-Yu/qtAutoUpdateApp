@@ -4,12 +4,11 @@ on:
     branches:
       - 'feature/**'
 
-
-
 jobs:
   Auto-PR:
     name: Auto Create PR
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: 获取代码
         uses: actions/checkout@master
