@@ -3,12 +3,7 @@ on:
   push:
     branches:
       - 'feature/**'
-  workflow_dispatch: # 如果手动触发的话，则定义如下参数
-    inputs:
-      input:
-        description: 'Environment'
-        required: false
-        default: 'uat'
+
 
 
 jobs:
@@ -165,4 +160,3 @@ jobs:
       - name: Notification-Email
         run: |
           echo Send an email.
-          
