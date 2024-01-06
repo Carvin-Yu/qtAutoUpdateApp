@@ -15,7 +15,7 @@ jobs:
       - name: Check if first commit
         id: first_commit
         run: |
-          if [[ -z $(git log --oneline feature/JIRA-2154) ]]; then
+          if [[ -z $(git log --oneline ${{ github.ref }}) ]]; then
             echo "true"
           else
             echo "false"
