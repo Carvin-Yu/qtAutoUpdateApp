@@ -19,6 +19,7 @@ jobs:
       - name: Get branch list
         run: |
           git branch -r --no-abbrev | sed 's/origin\///' > branch_list.txt
+          cat branch_list.txt
 
       - name: Update branches
         run: |
