@@ -9,22 +9,21 @@ jobs:
     name: Auto Create PR
     runs-on: ubuntu-latest
     continue-on-error: true
-    
     steps:
       - name: 获取代码
         uses: actions/checkout@master
-      - name: Check if it's the first commit
-        id: check_commit
+      - name: Check if first commit
+        id: first_commit
         run: |
-          if [[ $(git rev-parse --abbrev-ref HEAD) != "main" ]]; then
-            git fetch origin main
-            COMMIT_COUNT=$(git rev-list --count HEAD..origin/main)
-            echo "is_first_commit=$(test $COMMIT_COUNT -eq 0 && echo true || echo false)" >> $GITHUB_ENV
-          else
-            echo "is_first_commit=false" >> $GITHUB_ENV
+          if [ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]; then
+            COMMIT_COUNT=$(git rev-list --count HEAD..main)
+            if [ "$COMMIT_COUNT" -eq 0 ]; then
+              echo "first_commit=true" >> $GITHUB_ENV
+            fi
           fi
+
       - name: 创建PR
-        if: env.check_commit == 'true'
+        if: env.first_commit == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
