@@ -23,19 +23,6 @@ jobs:
           delete-branch: true
           base: main
           branch: ${{ github.ref }}
-      - name: Auto Integrate New Change From Trunk
-        continue-on-error: true
-        run: |
-          git config --global user.name "${{ github.event.pull_request.user.login }}"
-          git config --global user.email "${{ github.event.pull_request.user.email }}"
-          git checkout main
-          git pull origin main
-          git checkout -
-          git merge main --no-commit --no-ff || true
-          git commit -m "Integrated new changes from master branch" --allow-empty
-          git push origin HEAD
-
-
   Unit-Test:
     needs: Auto-Integration
     name: Unit-Test
