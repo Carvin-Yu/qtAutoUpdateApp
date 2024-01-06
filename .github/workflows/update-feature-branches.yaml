@@ -24,6 +24,8 @@ jobs:
 
       - name: Update branches
         run: |
+          git config --global user.name "${{ github.event.pull_request.user.login }}"
+          git config --global user.email "${{ github.event.pull_request.user.email }}"
           while IFS= read -r branch; do
             if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
