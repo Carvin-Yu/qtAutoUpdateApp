@@ -32,7 +32,7 @@ jobs:
     needs: Auto-PR
     name: Unit-Test
     runs-on: ubuntu-latest
-    if: github.event.before != '0000000000000000000000000000000000000000'
+    if: secrets.GITHUB_ENV == 'true'
     steps:
       - name: 开始扫描
         run: |
