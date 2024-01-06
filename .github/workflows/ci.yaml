@@ -8,23 +8,6 @@ on:
       input:
         description: 'Environment'
         required: false
-      checkbox:
-        description: 'Action'
-        required: false
-        options:
-          - Unit-Test
-          - Sonar-Qube-Scan
-          - Build-Package
-          - Build-Image
-          - Build-Chart
-          - Deploy-Validate
-          - SAST-Scan
-          - DAST-Scan
-          - CONT-Scan
-          - FOSS-Scan
-          - Regression-Test
-          - Performance-Test
-          - Notification-Email
 
 
 jobs:
@@ -174,7 +157,7 @@ jobs:
         run: |
           echo Performance-Test
   Notification-Email:
-    needs: [SAST-Scan,DAST-Scan,CONT-Scan,FOSS-Scan,Regression-Test,Performance-Test]
+    needs: Regression-Test
     name: Notification-Email
     runs-on: ubuntu-latest
     steps:
