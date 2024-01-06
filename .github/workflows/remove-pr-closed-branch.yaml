@@ -2,8 +2,6 @@ name: Delete Branch
 
 on:
   pull_request
-    branches:
-      - 'feature/**'
     types:
       - closed
 
@@ -23,3 +21,10 @@ jobs:
           head_ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
           git push origin --delete "$head_ref"
 
+          # 如果 PR 已合并，则删除分支
+          if [ "$merged" = "true" ]; then
+            echo "Deleting branch $head_ref"
+            
+          else
+            echo "PR is not merged. Branch will not be deleted."
+          fi
