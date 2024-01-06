@@ -12,14 +12,12 @@ jobs:
       - name: 获取代码
         uses: actions/checkout@master
         continue-on-error: true
-      - name: Check if first commit
-        id: first_commit
+      - name: Check if new branch
         run: |
-          commit_count=$(git rev-list --count ${{ github.ref }} 2>/dev/null)
-          if [[ $commit_count -eq 0 ]]; then
-            echo "true"
+          if [ "${{ github.event.before }}" = "${{ github.event.after }}" ]; then
+            echo "Current branch is a new branch"
           else
-            echo "false"
+            echo "Current branch is not a new branch"
           fi
       - name: 创建PR
         if: env.first_commit == 'true'
