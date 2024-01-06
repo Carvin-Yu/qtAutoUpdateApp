@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'feature/**'
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   Auto-PR:
@@ -75,7 +76,7 @@ jobs:
           echo upload chart
   Deploy-Validate:
     needs: [Build-Package,Build-Image,Build-Chart]
-    name: 部署的验证
+    name: Deploy-Validate
     runs-on: ubuntu-latest
     steps:
       - name: 开始部署
