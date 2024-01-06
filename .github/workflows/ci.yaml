@@ -11,7 +11,7 @@ on:
       checkbox:
         description: 'Action'
         required: false
-        default: [Unit-Test,Sonar-Qube-Scan,Build-Package,Build-Image,Build-Chart,Regression-Test]
+        default: ['Unit-Test','Sonar-Qube-Scan','Build-Package','Build-Image','Build-Chart','Regression-Test']
         options:
           - Unit-Test
           - Sonar-Qube-Scan
