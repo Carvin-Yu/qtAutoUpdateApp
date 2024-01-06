@@ -8,26 +8,27 @@ jobs:
   Auto-PR:
     name: Auto Create PR
     runs-on: ubuntu-latest
+    continue-on-error: true
+    
     steps:
-    - name: Check if branch is newly created
-      id: check_branch
-      run: |
-        if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
-          echo "::set-output name=new_branch::true"
-        else
-          echo "::set-output name=new_branch::false"
-        fi
-
-    - name: Create Pull Request
-      if: steps.check_branch.outputs.new_branch == 'true'
-      uses: peter-evans/create-pull-request@v3
-      with:
-        token: ${{ secrets.TOKEN_GITHUB }}
-        branch: ${{ github.ref }}
-        title: Automatically created Pull Request
-        body: |
-          This is an automatically created Pull Request.
-          Please review and merge if approved.
+      - name: 获取代码
+        uses: actions/checkout@master
+      - name: Check if branch is newly created
+        id: check_branch
+        run: |
+          if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
+            echo "::set-output name=new_branch::true"
+          else
+            echo "::set-output name=new_branch::false"
+          fi
+      - name: 创建PR
+        if: steps.check_branch.outputs.new_branch == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          delete-branch: true
+          base: main
+          branch: ${{ github.ref }}
   Unit-Test:
     needs: Auto-PR
     name: Unit-Test
