@@ -13,19 +13,17 @@ jobs:
         uses: actions/checkout@master
         continue-on-error: true
       - name: run1
-        run: git rev-parse --abbrev-ref HEAD
+        run: git rev-parse --abbrev-ref HEAD)" != "main
       - name: run2
         run: git rev-list --count HEAD..main
       - name: Check if first commit
         id: first_commit
         run: |
-          if [ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]; then
-            COMMIT_COUNT=$(git rev-list --count HEAD..main)
-            if [ "$COMMIT_COUNT" -eq 0 ]; then
-              echo "first_commit=true" >> $GITHUB_ENV
-            fi
+          if [[ -z $(git log --oneline ${{ github.ref }}) ]]; then
+            echo "true" >> $GITHUB_ENV
+          else
+            echo "false" >> $GITHUB_ENV
           fi
-
       - name: 创建PR
         if: env.first_commit == 'true'
         uses: peter-evans/create-pull-request@v5
