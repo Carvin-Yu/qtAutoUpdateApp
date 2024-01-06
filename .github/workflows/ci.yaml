@@ -6,7 +6,7 @@ on:
 
 jobs:
   Auto-PR:
-    name: 自动创建PR
+    name: Auto Create PR
     runs-on: ubuntu-latest
     steps:
       - name: 获取代码
@@ -18,9 +18,20 @@ jobs:
           delete-branch: true
           base: main
           branch: ${{ github.ref }}
+  Unit-Test:
+    needs: Auto-PR
+    name: Unit-Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 开始扫描
+        run: |
+          echo Unit-Test
+      - name: 完成扫描
+        run: |
+          echo upload evidence
   Sonar-Qube-Scan:
     needs: Auto-PR
-    name: SonarQube Scan
+    name: Sonar-Qube-Scan
     runs-on: ubuntu-latest
     steps:
       - name: 开始扫描
@@ -31,7 +42,7 @@ jobs:
           echo upload evidence
   Build-Package:
     needs: Auto-PR
-    name: 构建包
+    name: Build-Package
     runs-on: ubuntu-latest
     steps:
       - name: 开始构建包
@@ -42,7 +53,7 @@ jobs:
           echo upload package
   Build-Image:
     needs: Build-Package
-    name: 构建镜像
+    name: Build-Image
     runs-on: ubuntu-latest
     steps:
       - name: 开始构建镜像
@@ -53,7 +64,7 @@ jobs:
           echo upload image
   Build-Chart:
     needs: Build-Image
-    name: 构建Helm Chart
+    name: Build-Chart
     runs-on: ubuntu-latest
     steps:
       - name: 开始构建Chart
