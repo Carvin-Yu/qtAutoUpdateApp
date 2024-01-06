@@ -13,13 +13,15 @@ jobs:
     steps:
       - name: 获取代码
         uses: actions/checkout@master
-      - name: Check if branch is newly created
-        id: check_branch
+      - name: Check if it's the first commit
+        id: check_commit
         run: |
-          if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
-            echo "::set-output name=new_branch::true"
+          if [[ $(git rev-parse --abbrev-ref HEAD) != "main" ]]; then
+            git fetch origin main
+            COMMIT_COUNT=$(git rev-list --count HEAD..origin/main)
+            echo "::set-output name=is_first_commit::$(test $COMMIT_COUNT -eq 0 && echo true || echo false)"
           else
-            echo "::set-output name=new_branch::false"
+            echo "::set-output name=is_first_commit::false"
           fi
       - name: 创建PR
         if: steps.check_branch.outputs.new_branch == 'true'
