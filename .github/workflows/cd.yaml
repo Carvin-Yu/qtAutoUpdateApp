@@ -4,7 +4,17 @@ on:
   push: # 代码推送到main分支自动触发工作流
     branches:
       - main
-  workflow_dispatch: # 手动触发
+  workflow_dispatch: # 允许手动触发
+    inputs:
+      environment:
+        type: choice
+        description: 'Action'
+        required: false
+        default: Just Release
+        options:
+        - Release
+        - Release ann Deploy
+
 
 permissions: write-all # 给所有工作写权限
 
