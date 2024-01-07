@@ -9,18 +9,15 @@ on:
         description: 'environment'
         required: false
         default: 'dev01'
-        options: 
-          - dev01
-          - dev02
-          - dev03
       options:
+        type: choice
         description: 'action'
         required: false
-        default: 'AAA,BBB'
-        options: 
-          - AAA
-          - BBB
-          - CCC
+        default: 'info,warning'
+        options:
+        - info
+        - warning
+        - debug
  
 jobs:
   Auto-Integration:
