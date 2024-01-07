@@ -23,6 +23,7 @@ jobs:
 
           # 遍历分支列表
           for branch in $branches; do
+            echo current branch: $branches
             # 跳过main分支
             if [ "$branch" != "main" ]; then
               # 切换到分支
