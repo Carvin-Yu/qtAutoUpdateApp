@@ -1,4 +1,4 @@
-name: PR Close Event
+name: PR Close
 
 on:
   pull_request:
@@ -10,7 +10,6 @@ permissions: write-all
 jobs:
   delete-branch:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,7 +19,6 @@ jobs:
           base_ref=$(jq --raw-output .pull_request.base.ref "$GITHUB_EVENT_PATH")
           head_ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
           git push origin --delete "$head_ref"
-
           if [ "$merged" = "true" ]; then
             echo "Deleting branch $head_ref"
             
@@ -31,7 +29,6 @@ jobs:
         run: |
             git config --local user.email "actions@github.com"
             git config --local user.name "Github Actions"    
-
       - name: Merge master back to feature
         run: |
           git fetch --unshallow
