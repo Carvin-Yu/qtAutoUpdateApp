@@ -20,7 +20,7 @@ on:
         default: false
       action-SCAN:
         type: boolean
-        description: -SCAN:
+        description: All-SCAN:
         default: false
       action-Regression-Test:
         type: boolean
