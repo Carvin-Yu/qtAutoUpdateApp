@@ -1,19 +1,10 @@
-name: 持续交付
+name: 发布软件
 
 on:
   push: # 代码推送到main分支自动触发工作流
     branches:
       - main
-  workflow_dispatch: # 允许手动触发
-    inputs:
-      environment:
-        type: choice
-        description: 'Action'
-        required: false
-        default: Just Release
-        options:
-        - Release
-        - Release ann Deploy
+  workflow_dispatch: # 手动触发
 
 permissions: write-all # 给所有工作写权限
 
@@ -25,11 +16,13 @@ jobs:
       version: ${{ steps.create_version.outputs.tag_name }} # 版本号
       body: ${{ steps.create_version.outputs.body }} # 版本变更内容
     steps:
-      - name: 生成版本号
-        id: tag_name
-        uses: mathieudutour/github-tag-action@v6.1
+      - uses: release-drafter/release-drafter@v5
+        id: create_version
         with:
-          github_token: ${{ env.TOKEN_GITHUB }}
+          config-name: release-drafter.yml # 配置文件在 .github/release-drafter.yml
+          disable-autolabeler: true # 禁止自动标签
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 查看变量
         run: |
           echo ${{ format('version={0}', steps.create_version.outputs.tag_name ) }} 
@@ -137,7 +130,7 @@ jobs:
       - name: 发布文件
         uses: ncipollo/release-action@v1
         with:
-          token: ${{ secrets.TOKEN_GITHUB }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true # 覆盖文件
           #draft: true # 草稿 自己可见 版本号会保持一样 默认是自动发布 latest
           #prerelease: true # 预发布 别人可以看到 版本号会继续加
