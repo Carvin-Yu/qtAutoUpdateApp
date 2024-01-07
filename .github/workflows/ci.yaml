@@ -17,6 +17,11 @@ on:
         - uat01
         - uat02
         - uat03
+      config-file:
+        type: string
+        description: 'Config File'
+        default: 'value-uat.yaml'
+        required: false
       action-Deploy-Validate:
         type: boolean
         description: Deploy-Validate
@@ -37,11 +42,6 @@ on:
         type: boolean
         description: Notification-Email
         default: true
-      config-file:
-        type: string
-        description: 'Config-File'
-        default: 'value-uat.yaml'
-        required: false
 
  
 jobs:
