@@ -19,7 +19,7 @@ jobs:
       - name: Merge changes to other branches
         run: |
           # 获取所有分支列表
-          branches=$(git branch --list --format="%(refname:lstrip=2)")
+          branches=$(git branch --list --format="%(refname:lstrip=2)" -- 'feature/*')
           echo  $branches
           # 遍历分支列表
           for branch in $branches; do
