@@ -27,4 +27,24 @@ jobs:
           else
             echo "PR is not merged. Branch will not be deleted."
           fi
- 
+      - name: Set Git config
+        run: |
+            git config --local user.email "actions@github.com"
+            git config --local user.name "Github Actions"    
+
+      - name: Merge master back to feature
+        run: |
+          git fetch --unshallow
+          for branch in $(git branch -r --list "origin/feature/*"); do
+            branch_name=$(echo $branch | sed 's/origin\///')
+            git checkout -B $branch_name $branch  || true
+            git pull || true
+            if git merge main --no-commit; then
+                git commit -m "Merge main into $branch_name" || true
+                git push origin $branch_name || true
+            else
+                git merge --abort
+                git reset --hard HEAD
+                continue
+            fi
+          done
