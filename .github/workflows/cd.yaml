@@ -32,7 +32,7 @@ jobs:
           config-name: release-drafter.yml # 配置文件在 .github/release-drafter.yml
           disable-autolabeler: true # 禁止自动标签
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: 查看变量
         run: |
           echo ${{ format('version={0}', steps.create_version.outputs.tag_name ) }} 
