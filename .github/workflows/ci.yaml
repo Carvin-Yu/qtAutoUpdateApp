@@ -6,21 +6,24 @@ on:
   workflow_dispatch: # 允许手动触发
     inputs:
       environment:
-        type: environment
-        description: 'environment'
+        type: choice
+        description: 'Environment'
         required: false
-        default: uat
+        default: uat01
         options:
-        - dev1
-        - dev2
-        - uat
+        - dev01
+        - dev02
+        - dev03
+        - uat01
+        - uat02
+        - uat03
       action-Deploy-Validate:
         type: boolean
         description: Deploy-Validate
-        default: false
+        default: true
       action-SCAN:
         type: boolean
-        description: All-SCAN
+        description: SAST-DAST-CONT-FOSS-SCAN
         default: false
       action-Regression-Test:
         type: boolean
@@ -34,7 +37,11 @@ on:
         type: boolean
         description: Notification-Email
         default: true
-        
+      config-file:
+        type: string
+        description: 'Config-File'
+        default: 'value-uat.yaml'
+        required: false
 
  
 jobs:
