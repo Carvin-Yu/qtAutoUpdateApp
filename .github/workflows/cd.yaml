@@ -13,7 +13,6 @@ on:
         default: Just Release
         options:
         - Release
-        - Release ann Deploy
 
 permissions: write-all # 给所有工作写权限
 
