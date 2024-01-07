@@ -26,8 +26,8 @@ jobs:
             git checkout -B $branch_name $branch  || true
             git pull || true
             if git merge main --no-commit; then
-                git commit -m "Merge main into $branch_name"
-                git push origin $branch_name
+                git commit -m "Merge main into $branch_name" || true
+                git push origin $branch_name || true
             else
                 git merge --abort
                 git reset --hard HEAD
