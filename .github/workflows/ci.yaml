@@ -3,6 +3,24 @@ on:
   push:
     branches:
       - 'feature/**'
+  workflow_dispatch: # 允许手动触发
+    inputs:
+      environment:
+        description: 'environment'
+        required: false
+        default: 'dev01'
+        options: 
+          - dev01
+          - dev02
+          - dev03
+      options:
+        description: 'action'
+        required: false
+        default: 'AAA,BBB'
+        options: 
+          - AAA
+          - BBB
+          - CCC
  
 jobs:
   Auto-Integration:
