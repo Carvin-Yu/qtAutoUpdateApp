@@ -34,7 +34,9 @@ jobs:
           trap 'process_branch' ERR
           
           for branch in $(git branch -r --list "origin/feature/*"); do
-            process_branch $branch
+            if ! process_branch $branch; then
+              continue
+            fi
           done
 
 
