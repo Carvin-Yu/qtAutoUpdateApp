@@ -34,7 +34,10 @@ jobs:
           trap 'process_branch' ERR
           
           for branch in $(git branch -r --list "origin/feature/*"); do
+            git pull
             git merge --quit
+            git clean -f
+            git reset --hard HEAD
             if ! process_branch $branch; then
               continue
             fi
