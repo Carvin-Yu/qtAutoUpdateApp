@@ -22,16 +22,14 @@ jobs:
         run: |
           git fetch --unshallow
           git pull
-          for branch in $(git branch -r --list "origin/feature/*"); do
-            branch_name=$(echo $branch | sed 's/origin\///')
-            git checkout -B $branch_name $branch
-            git pull
-            git merge main
-            if [ $? -ne 0 ]; then
-                git merge --abort
-                git reset --hard HEAD
-            fi
-            git push origin $branch_name
+          if git merge main --no-commit; then
+              git commit -m "Merge main into $branch_name"
+              git push origin $branch_name
+          else
+              git merge --abort
+              git reset --hard HEAD
+              continue
+          fi
           done
 
 
