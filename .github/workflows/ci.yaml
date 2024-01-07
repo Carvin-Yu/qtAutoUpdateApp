@@ -9,12 +9,63 @@ on:
         type: environment
         description: 'environment'
         required: false
-        default: [uat]
+        default: uat
         options:
         - dev1
         - dev2
         - uat
-
+        action1:
+          type: boolean
+          description: Unit-Test
+          default: false
+        action2:
+          type: boolean
+          description: Sonar-Qube-Scan
+          default: false
+        action3:
+          type: boolean
+          description: Build-Package
+          default: false
+        action4:
+          type: boolean
+          description: Build-Image
+          default: false
+        action5:
+          type: boolean
+          description: Build-Chart
+          default: false
+        action6:
+          type: boolean
+          description: Deploy-Validate
+          default: false
+        action7:
+          type: boolean
+          description: SAST-SCAN
+          default: false
+        action8:
+          type: boolean
+          description: DAST-SCAN
+          default: false
+        action9:
+          type: boolean
+          description: CONT-SCAN
+          default: false
+        action10:
+          type: boolean
+          description: FOSS-SCAN
+          default: false
+        action11:
+          type: boolean
+          description: Regression-Test
+          default: false
+        action12:
+          type: boolean
+          description: Performance-Test
+          default: false
+        action13:
+          type: boolean
+          description: Notification-Email
+          default: false
         
 
  
