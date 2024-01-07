@@ -30,7 +30,7 @@ jobs:
           while IFS= read -r branch; do
             if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
-              git merge origin/main --no-edit || true
+              git merge origin/main --no-edit --allow-unrelated-histories || true
               if [[ $? -eq 0 ]]; then
                 git add --ignore-errors .  # 添加文件并忽略错误
                 git commit -m "Merge changes from main branch"
