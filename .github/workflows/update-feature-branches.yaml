@@ -23,8 +23,8 @@ jobs:
           git fetch --unshallow
           for branch in $(git branch -r --list "origin/feature/*"); do
             branch_name=$(echo $branch | sed 's/origin\///')
-            git checkout -B $branch_name $branch
-            git pull
+            git checkout -B $branch_name $branch  || true
+            git pull || true
             if git merge main --no-commit; then
                 git commit -m "Merge main into $branch_name"
                 git push origin $branch_name
@@ -34,5 +34,4 @@ jobs:
                 continue
             fi
           done
-
 
