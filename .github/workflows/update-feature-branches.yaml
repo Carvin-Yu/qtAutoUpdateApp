@@ -24,7 +24,6 @@ jobs:
           git pull
           for branch in $(git branch -r --list "origin/feature/*"); do
             branch_name=$(echo $branch | sed 's/origin\///')
-            git fetch --unshallow
             git checkout -B $branch_name $branch
             git pull
             git merge --no-ff master -m "Auto-merge master back to $branch_name"
