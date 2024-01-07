@@ -13,36 +13,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Fetch all branches
-        run: git fetch --all
-
-      - name: Merge changes to other branches
+      - name: Set Git config
         run: |
-          # 获取所有分支列表
-          branches=$(git branch --list 'feature/*' | cut -c 3-)
-            for branch in $branches
-            do
-                echo $branch
-            done
-          # 遍历分支列表
-          for branch in $branches; do
-            echo current branch: $branches
-            # 跳过main分支
-            if [ "$branch" != "main" ]; then
-              # 切换到分支
-              git checkout "$branch"
+            git config --local user.email "actions@github.com"
+            git config --local user.name "Github Actions"    
 
-              # 合并main分支的变更
-              git merge main --no-commit
-
-              # 提交合并结果
-              git commit -m "Merge changes from main"
-
-              # 推送到远程分支
-              git push origin "$branch"
-            fi
+      - name: Merge master back to feature
+        run: |
+          git fetch --unshallow
+          git checkout dev
+          git pull
+          for branch in $(git branch -r --list "origin/feature/*"); do
+            branch_name=$(echo $branch | sed 's/origin\///')
+            git checkout -B $branch_name $branch
+            git merge --no-ff master -m "Auto-merge master back to $branch_name"
+            git push origin $branch_name
           done
+          git checkout dev
+          git push
 
-          # 切换回main分支
-          git checkout main
 
