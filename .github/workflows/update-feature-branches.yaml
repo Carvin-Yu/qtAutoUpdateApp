@@ -22,12 +22,19 @@ jobs:
         run: |
           git fetch --unshallow
           git pull
-          for branch in $(git branch -r --list "origin/feature/*"); do
+          process_branch() {
+            local branch=$1
             branch_name=$(echo $branch | sed 's/origin\///')
             git checkout -B $branch_name $branch
             git pull
             git merge --no-ff main -m "Auto-merge master back to $branch_name"
             git push origin $branch_name
+          }
+          
+          trap 'process_branch' ERR
+          
+          for branch in $(git branch -r --list "origin/feature/*"); do
+            process_branch $branch
           done
 
 
