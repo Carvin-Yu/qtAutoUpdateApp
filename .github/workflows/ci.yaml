@@ -14,50 +14,18 @@ on:
         - dev1
         - dev2
         - uat
-      action-Unit-Test:
-        type: boolean
-        description: Unit-Test
-        default: false
-      action-Sonar-Qube-Scan:
-        type: boolean
-        description: Sonar-Qube-Scan
-        default: false
-      action-Build-Package:
-        type: boolean
-        description: Build-Package
-        default: false
-      action-Build-Image:
-        type: boolean
-        description: Build-Image
-        default: false
-      action-Build-Chart:
-        type: boolean
-        description: Build-Chart
-        default: false
       action-Deploy-Validate:
         type: boolean
         description: Deploy-Validate
         default: false
-      action-SAST-SCAN:
+      action-SCAN:
         type: boolean
-        description: SAST-SCAN
-        default: false
-      action-DAST-SCAN:
-        type: boolean
-        description: DAST-SCAN
-        default: false
-      action-CONT-SCAN:
-        type: boolean
-        description: CONT-SCAN
-        default: false
-      action-FOSS-SCAN:
-        type: boolean
-        description: FOSS-SCAN
+        description: -SCAN:
         default: false
       action-Regression-Test:
         type: boolean
         description: Regression-Test
-        default: false
+        default: true
       action-Performance-Test:
         type: boolean
         description: Performance-Test
@@ -65,7 +33,7 @@ on:
       action-Notification-Email:
         type: boolean
         description: Notification-Email
-        default: false
+        default: true
         
 
  
