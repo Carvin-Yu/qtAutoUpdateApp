@@ -20,7 +20,7 @@ jobs:
         run: |
           # 获取所有分支列表
           branches=$(git branch --list --format="%(refname:lstrip=2)")
-
+          echo  $branches
           # 遍历分支列表
           for branch in $branches; do
             echo current branch: $branches
