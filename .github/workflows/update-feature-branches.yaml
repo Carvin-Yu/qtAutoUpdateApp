@@ -16,28 +16,29 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
-      - name: Get branch list
+      - name: Merge changes to other branches
         run: |
-          git branch -r --no-abbrev --list 'origin/feature/*' | sed 's/origin\///' | sed 's/^[[:space:]]*//' > branch_list.txt
-          cat branch_list.txt
-      
-      
-      - name: Update branches
-        run: |
-          set -e  # 添加错误处理机制
-          git config --global user.name "robot@example.com"
-          git config --global user.email "Github Robot"
-          while IFS= read -r branch; do
-            if [[ "$branch" != "main" ]]; then
+          # 获取所有分支列表
+          branches=$(git branch --list --format="%(refname:lstrip=2)")
+
+          # 遍历分支列表
+          for branch in $branches; do
+            # 跳过main分支
+            if [ "$branch" != "main" ]; then
+              # 切换到分支
               git checkout "$branch"
-              git merge origin/main --no-edit --allow-unrelated-histories || true
-              if [[ $? -eq 0 ]]; then
-                git add --ignore-errors .  # 添加文件并忽略错误
-                git commit -m "Merge changes from main branch"
-                git push origin "$branch"
-              else
-                echo "Skipping branch $branch due to conflicts"
-              fi
+
+              # 合并main分支的变更
+              git merge main --no-commit
+
+              # 提交合并结果
+              git commit -m "Merge changes from main"
+
+              # 推送到远程分支
+              git push origin "$branch"
             fi
-          done < branch_list.txt
+          done
+
+          # 切换回main分支
+          git checkout main
 
