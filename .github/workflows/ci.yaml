@@ -6,18 +6,18 @@ on:
   workflow_dispatch: # 允许手动触发
     inputs:
       environment:
+        type: environment
         description: 'environment'
         required: false
-        default: 'dev01'
-      options:
-        type: choice
-        description: 'action'
-        required: false
-        default: 'info,warning'
+        default: 'uat'
         options:
-        - info
-        - warning
-        - debug
+        - dev1
+        - dev2
+        - uat
+      action:
+        type: boolean
+        description: True or False
+
  
 jobs:
   Auto-Integration:
