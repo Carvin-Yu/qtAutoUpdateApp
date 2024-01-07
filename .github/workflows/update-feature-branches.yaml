@@ -20,16 +20,17 @@ jobs:
         run: |
           git branch -r --no-abbrev --list 'origin/feature/*' | sed 's/origin\///' | sed 's/^[[:space:]]*//' > branch_list.txt
           cat branch_list.txt
-
-
+      
+      
       - name: Update branches
         run: |
+          set -e  # 添加错误处理机制
           git config --global user.name "robot@example.com"
           git config --global user.email "Github Robot"
           while IFS= read -r branch; do
             if [[ "$branch" != "main" ]]; then
               git checkout "$branch"
-              git merge origin/main  --no-edit || true
+              git merge origin/main --no-edit || true
               if [[ $? -eq 0 ]]; then
                 git commit -m "Merge changes from main branch"
                 git push origin "$branch"
@@ -38,3 +39,4 @@ jobs:
               fi
             fi
           done < branch_list.txt
+
