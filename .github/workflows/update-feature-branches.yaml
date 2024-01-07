@@ -32,6 +32,7 @@ jobs:
               git checkout "$branch"
               git merge origin/main --no-edit || true
               if [[ $? -eq 0 ]]; then
+                git add --ignore-errors .  # 添加文件并忽略错误
                 git commit -m "Merge changes from main branch"
                 git push origin "$branch"
               else
