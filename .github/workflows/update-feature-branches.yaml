@@ -22,14 +22,6 @@ jobs:
         run: |
           git fetch --unshallow
           git pull
-          clean_up_merge() {
-          local branch=$1
-          git merge --abort
-          }
-          clean_up_reset() {
-          local branch=$1
-          git merge --abort
-          }
           process_branch() {
             local branch=$1
             branch_name=$(echo $branch | sed 's/origin\///')
@@ -39,14 +31,10 @@ jobs:
             git push origin $branch_name
           }
           
-          trap 'clean_up_merge' ERR
-          trap 'clean_up_reset' ERR
           trap 'process_branch' ERR
           
           for branch in $(git branch -r --list "origin/feature/*"); do
-            clean_up_merge $branch
-            clean_up_reset $branch
-            git reset --hard HEAD
+            git merge --quit
             if ! process_branch $branch; then
               continue
             fi
