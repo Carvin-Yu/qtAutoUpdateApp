@@ -28,8 +28,8 @@ jobs:
       - name: 生成版本号
         id: tag_name
         uses: mathieudutour/github-tag-action@v6.1
-        env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+        with:
+          github_token: ${{ secrets.TOKEN_GITHUB }}
       - name: 查看变量
         run: |
           echo ${{ format('version={0}', steps.create_version.outputs.tag_name ) }} 
