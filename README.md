@@ -30,7 +30,7 @@ GithubActions 项目发布最佳实践 https://www.bilibili.com/video/BV1Ud4y1K7
 
 * 支持 Window 系统应用更新
 
-* 无需服务器
+* 无需服务器x
 
 * 使用 Github 自动构建软件和发布软件
 
